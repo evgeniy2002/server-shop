@@ -1,7 +1,5 @@
 
 const db = require('../db')
-// const { off } = require('process')
-// const e = require('express')
 const EasyYandexS3 = require("easy-yandex-s3");
 
 let s3 = new EasyYandexS3({
