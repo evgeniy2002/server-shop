@@ -1,34 +1,45 @@
-const uuid = require('uuid')
-const path = require('path')
+
 const db = require('../db')
-const { off } = require('process')
-const e = require('express')
+// const { off } = require('process')
+// const e = require('express')
+const EasyYandexS3 = require("easy-yandex-s3");
+
+let s3 = new EasyYandexS3({
+  auth: {
+    accessKeyId: "LtBLTqTD13dSySWVtvxo",
+    secretAccessKey: "DBEzoXasiI4f69dqUR27RZW6XPSWeMNYXURorwlK",
+  },
+  Bucket: "shop-storage", // например, "my-storage",
+  debug: true // Дебаг в консоли, потом можете удалить в релизе
+});
 
 class DeviceController {
   async create(req, res) {
     let { name, price, brandId, desc } = req.body
-    let device, fileName
+    let device, location
 
-    if(req.files){
-
+    if (req.files) {
       const { img } = req.files
-  
-      fileName = uuid.v4() + '.jpg'
-      img.mv(path.resolve(__dirname, '..', 'static', fileName))
+      let buffer = img.data
+
+      var upload = await s3.Upload({
+        buffer: buffer
+      }, "/images/");
+      location = upload.Location
     }
 
-    if(!req.files){
-       device = await db.query('insert into device(device_name, price, brand_id, description) values($1,$2,$3,$4) returning *',
-       [name, price, brandId, desc])
-    }else{
+    if (!req.files) {
+      device = await db.query('insert into device(device_name, price, brand_id, description) values($1,$2,$3,$4) returning *',
+        [name, price, brandId, desc])
+    } else {
 
       device = await db.query('insert into device(device_name, price, img, brand_id, description) values($1,$2,$3,$4,$5) returning *',
-        [name, price, fileName, brandId, desc])
+        [name, price, location, brandId, desc])
     }
 
 
     res.json(device.rows[0])
- 
+
   }
   async getAll(req, res) {
     let device
@@ -90,41 +101,47 @@ class DeviceController {
 
   async updateCountEye(req, res) {
 
-    let device,fileName
-
+    
     const { eyeId, rating } = req.query
-
+    
     const { newName, oldName, newDesc, newPrice } = req.body
-
-
-
+    
+    let device, location
     console.log(req.body)
-
     if (req.files) {
 
       const { img } = req.files
-  
-      fileName = uuid.v4() + '.jpg'
-      img.mv(path.resolve(__dirname, '..', 'static', fileName))
+      let buffer = img.data
+
+      var upload = await s3.Upload({
+        buffer: buffer
+      }, "/images/");
+      location = upload.Location
 
 
       // device = await db.query(`update device set img = '${fileName}' where device_name = '${oldName}'`)
     }
-    if (newName, fileName, newDesc, newPrice) {
-    
-      device = await db.query(`update device set device_name = '${newName}', price = ${newPrice}, img = '${fileName}', description = '${newDesc}' where device_name = '${oldName}'`)
-    }
-    if(fileName && !newName && !newPrice && !newDesc){
-      device = await db.query(`update device set img = '${fileName}' where device_name = '${oldName}'`)
+    // if (newName.length, location !== null, newDesc.length, newPrice.length) {
+    //   console.log('тут5')
+
+    //   device = await db.query(`update device set device_name = $1, price = $2, img = $3, description = $4 where device_name = $5`,
+    //   [newName, newPrice, location, newDesc, oldName])
+    // }
+    if (location && !newName && !newPrice && !newDesc) {
+      console.log('тут4')
+      device = await db.query(`update device set img = $1 where device_name = $2`, [location, oldName])
 
     }
-    if (newDesc && !newName && !newPrice && !fileName) {
+    if (newDesc && !newName && !newPrice && !location) {
+      console.log('тут3')
       device = await db.query(`update device set description = '${newDesc === ' ' ? '' : newDesc}' where device_name = '${oldName}'`)
     }
-    if (newPrice && !newDesc && !newName && !fileName) {
-      device = await db.query(`update device set price = ${newPrice} where device_name = '${oldName}'`)
+    if (newPrice && !newDesc && !newName && !location) {
+      console.log('тут2')
+      device = await db.query(`update device set price = $1 where device_name = $2`, [newPrice, oldName])
     }
-    if (newName && !newPrice && !newDesc && !fileName) {
+    if (newName && !newPrice && !newDesc && !location) {
+      console.log('тут1')
       device = await db.query(`update device set device_name = '${newName}' where device_name = '${oldName}'`)
     }
 

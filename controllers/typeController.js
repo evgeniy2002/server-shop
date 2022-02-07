@@ -1,24 +1,43 @@
 
 const db = require('../db')
-const uuid = require('uuid')
-const path = require('path')
+const EasyYandexS3 = require("easy-yandex-s3");
+
+
+
+let s3 = new EasyYandexS3({
+  auth: {
+    accessKeyId: "LtBLTqTD13dSySWVtvxo",
+    secretAccessKey: "DBEzoXasiI4f69dqUR27RZW6XPSWeMNYXURorwlK",
+  },
+  Bucket: "shop-storage", // например, "my-storage",
+  debug: true // Дебаг в консоли, потом можете удалить в релизе
+});
+
 
 class TypeController {
   async create(req, res) {
     const { name } = req.body
-    let type, fileName
+
+    let type, location
+
+
     if (req.files) {
 
       const { img } = req.files
+      let buffer = img.data
 
-      fileName = uuid.v4() + '.jpg'
-      console.log(fileName)
-      img.mv(path.resolve(__dirname, '..', 'static', fileName))
+      var upload = await s3.Upload({
+        buffer: buffer
+      }, "/images/");
+      location = upload.Location
     }
+
+
     if (!req.files) {
       type = await db.query('insert into type (type_name) values ($1) returning *', [name])
     } else {
-      type = await db.query('insert into type (type_name, img) values ($1, $2) returning *', [name, fileName])
+
+      type = await db.query('insert into type (type_name, img) values ($1, $2) returning *', [name, location])
     }
 
     res.json(type.rows[0])
@@ -46,28 +65,31 @@ class TypeController {
 
     const { newName, oldName } = req.body
 
-    let type, fileName
+    let type, location
 
     if (req.files) {
 
       const { img } = req.files
+      let buffer = img.data
 
-      fileName = uuid.v4() + '.jpg'
-      img.mv(path.resolve(__dirname, '..', 'static', fileName))
+      var upload = await s3.Upload({
+        buffer: buffer
+      }, "/images/");
+      location = upload.Location
     }
 
 
     // type = await db.query(`update type set img = '${fileName}' where type_name = '${oldName}'`)
-    if (fileName) {
-      type = await db.query(`update type set img = '${fileName}' where type_name = '${oldName}'`)
+    if (location) {
+      type = await db.query(`update type set img = $1 where type_name = $2`, [location, oldName])
 
     }
 
     if (newName && !req.files) {
-      type = await db.query(`update type set type_name = '${newName}' where type_name = '${oldName}'`)
+      type = await db.query(`update type set type_name = $1 where type_name = $2`, [newName, oldName])
     }
     if (newName && req.files) {
-      type = await db.query(`update type set type_name = '${newName}', img = '${fileName}' where type_name = '${oldName}'`)
+      type = await db.query(`update type set type_name = $1, img = $2 where type_name = $3`, [newName, location, oldName])
     }
 
 
@@ -89,18 +111,6 @@ class TypeController {
     res.json(type.rows)
   }
 
-  async updateInfo(req, res) {
-    const { newName } = req.body
-
-    const { newImg } = req.files
-
-    const fileName = uuid.v4() + '.jpg'
-    img.mv(path.resolve(__dirname, '..', 'static', fileName))
-
-    const type = await db.query('update type set type_name = $1, img = $2 where newName = $3', [newName, newImg, oldName])
-
-    res.json(type.rows[0])
-  }
 }
 
 module.exports = new TypeController()

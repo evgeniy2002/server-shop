@@ -1,24 +1,34 @@
-const uuid = require('uuid')
 const db = require('../db')
-const path = require('path')
+const EasyYandexS3 = require("easy-yandex-s3");
+
+let s3 = new EasyYandexS3({
+  auth: {
+    accessKeyId: "LtBLTqTD13dSySWVtvxo",
+    secretAccessKey: "DBEzoXasiI4f69dqUR27RZW6XPSWeMNYXURorwlK",
+  },
+  Bucket: "shop-storage", // например, "my-storage",
+  debug: true // Дебаг в консоли, потом можете удалить в релизе
+});
 
 class BrandController {
   async createBrand(req, res) {
     const { name, typeId } = req.body
 
-    let brand, fileName
+    let brand, location
 
     if (req.files) {
-
       const { img } = req.files
+      let buffer = img.data
 
-      fileName = uuid.v4() + '.jpg'
-      img.mv(path.resolve(__dirname, '..', 'static', fileName))
+      var upload = await s3.Upload({
+        buffer: buffer
+      }, "/images/");
+      location = upload.Location
     }
     if (!req.files) {
       brand = await db.query('insert into brand (brands_name, type_id) values ($1, $2) returning *', [name, typeId])
     } else {
-      brand = await db.query('insert into brand (brands_name, img, type_id) values ($1, $2, $3) returning *', [name, fileName, typeId])
+      brand = await db.query('insert into brand (brands_name, img, type_id) values ($1, $2, $3) returning *', [name, location, typeId])
     }
 
     res.json(brand.rows[0])
@@ -49,28 +59,31 @@ class BrandController {
   async updateInfo(req, res) {
     const { newName, oldName } = req.body
 
-    let brand, fileName
+    let brand, location
 
 
     if (req.files) {
 
       const { img } = req.files
+      let buffer = img.data
 
-      fileName = uuid.v4() + '.jpg'
-      img.mv(path.resolve(__dirname, '..', 'static', fileName))
+      var upload = await s3.Upload({
+        buffer: buffer
+      }, "/images/");
+      location = upload.Location
     }
 
 
-    if (fileName) {
-      brand = await db.query(`update brand set img = '${fileName}' where brands_name = '${oldName}'`)
+    if (location) {
+      brand = await db.query(`update brand set img = $1 where brands_name = $2`, [location, oldName])
 
     }
     if (newName && !req.files) {
       console.log('name')
-      brand = await db.query(`update brand set brands_name = '${newName}' where brands_name = '${oldName}'`)
+      brand = await db.query(`update brand set brands_name = $1 where brands_name = $2`, [newName, oldName])
     }
     if (newName && req.files) {
-      brand = await db.query(`update brand set brands_name = '${newName}', img = '${fileName}' where brands_name = '${oldName}'`)
+      brand = await db.query(`update brand set brands_name = $1, img = $2 where brands_name = $3`, [newName, location, oldName])
     }
 
     res.json(brand)
