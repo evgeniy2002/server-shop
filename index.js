@@ -6,7 +6,6 @@ const app = express()
 const fileUpload = require('express-fileupload')
 // const { Client } = require('pg');
 
-const PORT = process.env.PORT || 8080
 
 app.use(cors())
 app.use(express.json())
@@ -15,6 +14,7 @@ app.use(fileUpload({}))
 app.use('/api', router)
 
 
+const PORT = process.env.PORT || 8080
 
 
 app.listen(PORT, (req, res) => console.log('server been started on ' + PORT))
