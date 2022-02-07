@@ -17,7 +17,6 @@ app.use('/api', router)
 
 
 app.get('/', (req, res) => {
-  console.log(req.query)
   res.status(200).json('Hello server')
 })
 
