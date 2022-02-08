@@ -1,6 +1,6 @@
 const db = require('../db')
 // const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken')
+// const jwt = require('jsonwebtoken')
 
 class AuthController {
   async registration(req, res) {
@@ -29,7 +29,7 @@ class AuthController {
       // if(!validPassword){
       //   return res.status(400).json({message: 'invalid password'})
       // }
-      res.status(200).json('hello')
+      return res.status(200).json('hello')
       // const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
       // return res.json({ token: token })
 
