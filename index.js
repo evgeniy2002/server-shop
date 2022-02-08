@@ -11,7 +11,7 @@ const fileUpload = require('express-fileupload')
 // const authRouter = require('./routes/authRouter')
 
 
-app.use('/', router)
+// app.use('/api', router)
 app.use(cors())
 app.use(express.json())
 app.use(fileUpload({}))
