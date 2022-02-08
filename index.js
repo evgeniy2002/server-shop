@@ -11,10 +11,10 @@ const fileUpload = require('express-fileupload')
 // const authRouter = require('./routes/authRouter')
 
 
+app.use('/api', router)
 app.use(cors())
 app.use(express.json())
 app.use(fileUpload({}))
-app.use('/api', router)
 
 // app.use('/api/type', typeRouter)
 // app.use('/api/device', deviceRouter)
