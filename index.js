@@ -28,6 +28,10 @@ app.use('/api/admin', authRouter)
 
 let PORT = process.env.PORT || 8080
 
+app.get('/', (req,res) => {
+  res.status(200).json('hello')
+})
+
 app.listen(PORT, (req, res) => console.log('server been started on ' + PORT))
 
 
