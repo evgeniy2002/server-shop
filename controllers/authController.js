@@ -20,9 +20,10 @@ class AuthController {
   }
   async login(req, res) {
     try {
-      const { login, password } = req.body
-      // const admin_password = await db.query('select password from admin_user where user_name = $1', [login])
-      const admin_id = await db.query('select id from admin_user where user_name = $1', [login])
+      const { name, password } = req.body
+      
+      const admin_password = await db.query('select password from admin_user where user_name = $1', [name])
+      const admin_id = await db.query('select id from admin_user where user_name = $1', [name])
   
       const validPassword = bcrypt.compareSync(password, admin_password.rows[0].password);
    
@@ -31,7 +32,7 @@ class AuthController {
       }
       alert(admin_id, 'hey hey')
       const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
-      return res.json({ token: token })
+      res.status(200).json({ token: token })
 
     } catch (e) {
       console.log(e)
