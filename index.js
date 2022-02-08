@@ -15,11 +15,11 @@ app.use(cors())
 app.use(express.json())
 app.use(fileUpload({}))
 
-app.use('/api/type', typeRouter)
-app.use('/api/device', deviceRouter)
-app.use('/api/search', searchRouter)
-app.use('/api/brand', brandRouter)
-app.use('/api/admin', authRouter)
+// app.use('/api/type', typeRouter)
+// app.use('/api/device', deviceRouter)
+// app.use('/api/search', searchRouter)
+// app.use('/api/brand', brandRouter)
+// app.use('/api/admin', authRouter)
 
 // router.get("/todos", function(req, res) {
 //   res.json(todos);
