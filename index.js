@@ -14,7 +14,7 @@ app.use(fileUpload({}))
 app.use('/api', router)
 
 
-const PORT = process.env.PORT || 8080
+let PORT = process.env.PORT || 8080
 
 
 app.listen(PORT, (req, res) => console.log('server been started on ' + PORT))
