@@ -7,7 +7,7 @@ const searchRouter = require('./routes/searchRouter')
 const typeRouter = require('./routes/typeRouter')
 const deviceRouter = require('./routes/deviceRouter')
 const brandRouter = require('./routes/brandRouter')
-// const authRouter = require('./routes/authRouter')
+const authRouter = require('./routes/authRouter')
 const path = require('path')
 
 app.use(cors())
@@ -17,7 +17,7 @@ app.use(fileUpload({}))
 app.use('/api/type', typeRouter)
 app.use('/api/device', deviceRouter)
 app.use('/api/brand', brandRouter)
-// app.use('/api/admin', authRouter)
+app.use('/api/admin', authRouter)
 app.use('/api/search', searchRouter)
 
 
