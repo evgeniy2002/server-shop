@@ -4,19 +4,19 @@ const jwt = require('jsonwebtoken')
 
 class AuthController {
   async registration(req, res) {
-    try {
-      const { name, password } = req.body
+    // try {
+    //   const { name, password } = req.body
 
-      const hashPassword = bcrypt.hashSync(password, 7)
+    //   const hashPassword = bcrypt.hashSync(password, 7)
 
-      const new_user = await db.query('insert into admin_user( user_name, password ) values($1, $2) returning *', [name, hashPassword])
+    //   const new_user = await db.query('insert into admin_user( user_name, password ) values($1, $2) returning *', [name, hashPassword])
 
-      res.json(new_user.rows[0])
-      return res.json({ message: 'Пользователь успешно зарегестрирован' })
-    } catch (e) {
-      console.log(e)
-      res.status(400).json({ message: 'registration error' })
-    }
+    //   res.json(new_user.rows[0])
+    //   return res.json({ message: 'Пользователь успешно зарегестрирован' })
+    // } catch (e) {
+    //   console.log(e)
+    //   res.status(400).json({ message: 'registration error' })
+    // }
   }
   async login(req, res) {
     try {
