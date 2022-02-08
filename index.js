@@ -21,13 +21,6 @@ app.use('/api/brand', brandRouter)
 app.use('/api/admin', authRouter)
 
 
-app.get("*", (req, res) => {
-  let url = path.join(__dirname, '../client/build', 'index.html');
-  if (!url.startsWith('/app/')) // since we're on local windows
-    url = url.substring(1);
-  res.sendFile(url);
-});
-
 let PORT = process.env.PORT || 8080
 
 app.listen(PORT, (req, res) => console.log('server been started on ' + PORT))
