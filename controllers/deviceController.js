@@ -72,7 +72,7 @@ class DeviceController {
 
     }
     if (!brandId && typeOrder && orderBy) {
-      device = await db.query(`select * from device where rating > 5 limit 9 offset $1`, [offset])
+      device = await db.query(`select * from device where rating > 15 limit 15 offset $1`, [offset])
     }
     if (!Object.keys(req.query).length) {
       device = await db.query('select * from device')
