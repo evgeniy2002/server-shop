@@ -7,8 +7,7 @@ let s3 = new EasyYandexS3({
     accessKeyId: "LtBLTqTD13dSySWVtvxo",
     secretAccessKey: "DBEzoXasiI4f69dqUR27RZW6XPSWeMNYXURorwlK",
   },
-  Bucket: "shop-storage", // например, "my-storage",
-  debug: true // Дебаг в консоли, потом можете удалить в релизе
+  Bucket: "shop-storage"
 });
 
 class DeviceController {
@@ -42,7 +41,7 @@ class DeviceController {
   async getAll(req, res) {
     let device
 
-    let { brandId, typeOrder, orderBy, limit, page, maxPrice, lowerRange, upperRange } = req.query
+    let { brandId, typeOrder, orderBy, limit, page, maxPrice, lowerRange, upperRange, getBestseller } = req.query
 
 
     page = page || 1
@@ -50,13 +49,16 @@ class DeviceController {
     let offset = page * limit - limit
 
     if (brandId) {
+      console.log(brandId)
       device = await db.query(`select * from device where brand_id = $1 limit $2 offset $3`, [brandId, limit, offset])
     }
     if (typeOrder && orderBy) {
-      if (typeOrder === 'in_24_hour') {
-        device = await db.query(`select * from device where brand_id = $1 and create_at >= now() - interval '1 day' `, [brandId])
-      } else {
+
         device = await db.query(`select * from device where brand_id = $1 order by ${typeOrder === 'low_price' ? 'price' : typeOrder} ${orderBy} limit $2 offset $3`, [brandId, limit, offset])
+      
+
+      if (typeOrder === 'create_at') {
+        device = await db.query(`select * from device where brand_id = $1 and create_at > (current_timestamp - '1 day'::interval) `, [brandId])
       }
 
     }
@@ -64,20 +66,27 @@ class DeviceController {
       device = await db.query(`select max(price) from device where brand_id = ${brandId}`)
     }
     if (lowerRange && upperRange) {
-      if (typeOrder === 'in_24_hour') {
-        device = await db.query(`select * from device where brand_id = ${brandId} and price between ${lowerRange} and ${upperRange} and create_at >= now() - interval '1 day'`)
-      } else {
+ 
         device = await db.query(`select * from device where brand_id = ${brandId} and price between ${lowerRange} and ${upperRange}`)
-      }
+      
 
     }
-    if (!brandId && typeOrder && orderBy) {
-      device = await db.query(`select * from device where rating > 15 limit 15 offset $1`, [offset])
+    if (!brandId) {
+      device = await db.query(`select * from device where rating > 1 limit $1 offset $2`, [limit, offset])
+    }
+    if (getBestseller === 'true') {
+      device = await db.query(`select * from device where click_to_link > 1 limit $1 offset $2`, [limit, offset])
+      // console.log(device)
     }
     if (!Object.keys(req.query).length) {
       device = await db.query('select * from device')
     }
 
+
+    // if(getNewDevice = '1'){
+    //   const device = db.query(`SELECT id, (create_at > (current_timestamp - '1 day'::interval)) as "is_newly_added" FROM device where brand_id = '${brandId}'`)
+    //   console.log(device)
+    // }
 
 
 
@@ -99,13 +108,13 @@ class DeviceController {
 
   async updateCountEye(req, res) {
 
-    
-    const { eyeId, rating } = req.query
-    
-    const { newName, oldName, newDesc, newPrice } = req.body
-    
+
+    const { eyeId, linkId, rating, click_to_link } = req.query
+
+    const { newName, oldName, newDesc, newPrice, availabelProduct } = req.body
+
     let device, location
-    console.log(req.body)
+
     if (req.files) {
 
       const { img } = req.files
@@ -135,12 +144,30 @@ class DeviceController {
       device = await db.query(`update device set description = '${newDesc === ' ' ? '' : newDesc}' where device_name = '${oldName}'`)
     }
     if (newPrice && !newDesc && !newName && !location) {
-      console.log('тут2')
+
+      const current_price = await db.query(`select price from device where device_name = $1`, [oldName])
+
+      await db.query(`update device set old_price = $1 where device_name = $2`, [current_price.rows[0].price, oldName])
+
+
+      const percent_val = Math.floor(100 - (newPrice / current_price.rows[0].price) * 100)
+
+
+      await db.query(`update device set percent = $1 where device_name = $2`, [percent_val, oldName])
+
+      if (percent_val <= 0) {
+        await db.query(`update device set percent = 0, old_price = 0 where device_name = $1`, [oldName])
+      }
+
       device = await db.query(`update device set price = $1 where device_name = $2`, [newPrice, oldName])
+
     }
     if (newName && !newPrice && !newDesc && !location) {
-      console.log('тут1')
-      device = await db.query(`update device set device_name = '${newName}' where device_name = '${oldName}'`)
+      await db.query(`update device set device_name = '${newName}' where device_name = '${oldName}'`)
+    }
+
+    if (availabelProduct) {
+      await db.query(`update device set product_availability = '${availabelProduct === 'есть' ? true : false}' where device_name = $1`, [oldName])
     }
 
 
@@ -148,7 +175,9 @@ class DeviceController {
       await db.query(`update device set rating = ${rating} where id = ${eyeId}`)
 
     }
-
+    if(linkId && !eyeId){
+      await db.query(`update device set click_to_link = ${click_to_link} where id = ${linkId}`)
+    }
     res.json(device)
 
   }

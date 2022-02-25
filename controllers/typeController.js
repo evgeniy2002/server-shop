@@ -47,7 +47,7 @@ class TypeController {
     const { typeId, typeOrder } = req.query
 
     let types
-
+    // console.log(typeId)
 
     if (typeId) {
       types = await db.query(`select * from type where id = ${typeId}`)

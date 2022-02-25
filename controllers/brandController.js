@@ -34,17 +34,23 @@ class BrandController {
     res.json(brand.rows[0])
   }
   async getAllBrand(req, res) {
-    const { typeId } = req.query
+    const { brandId, brandOrder } = req.query
 
     let brand;
 
-    if (typeId) {
-      brand = await db.query(`select * from brand where type_id = $1 order by brands_name asc`, [typeId])
+    if (brandId && !brandOrder) {
+
+      brand = await db.query(`select * from brand where type_id = $1 order by brands_name desc`, [brandId])
+
     }
-    if (!typeId) {
+    if (!brandId && !brandOrder) {
+
       brand = await db.query('select * from brand')
     }
+    if (brandOrder && !brandId) {
 
+      brand = await db.query('select brand.id, brand.brands_name, brand.img, type.type_name from brand, type where brand.type_id = type.id order by brands_name desc limit 10')
+    }
     res.json(brand.rows)
   }
   async deleteBrand(req, res) {
@@ -58,6 +64,8 @@ class BrandController {
   }
   async updateInfo(req, res) {
     const { newName, oldName } = req.body
+
+    const { eyeId, rating } = req.query
 
     let brand, location
 
@@ -79,11 +87,16 @@ class BrandController {
 
     }
     if (newName && !req.files) {
-      console.log('name')
+
       brand = await db.query(`update brand set brands_name = $1 where brands_name = $2`, [newName, oldName])
     }
     if (newName && req.files) {
       brand = await db.query(`update brand set brands_name = $1, img = $2 where brands_name = $3`, [newName, location, oldName])
+    }
+
+    if (eyeId) {
+      await db.query(`update brand set rating = ${rating} where id = ${eyeId}`)
+
     }
 
     res.json(brand)
