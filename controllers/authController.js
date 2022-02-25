@@ -35,7 +35,7 @@ class AuthController {
       return res.status(200).json({ token: token })
 
     } catch (e) {
-      console.log(e)
+     
       res.status(400).json({ message: 'login error' })
     }
   }

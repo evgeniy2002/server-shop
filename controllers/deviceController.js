@@ -49,7 +49,7 @@ class DeviceController {
     let offset = page * limit - limit
 
     if (brandId) {
-      console.log(brandId)
+   
       device = await db.query(`select * from device where brand_id = $1 limit $2 offset $3`, [brandId, limit, offset])
     }
     if (typeOrder && orderBy) {
@@ -135,12 +135,12 @@ class DeviceController {
     //   [newName, newPrice, location, newDesc, oldName])
     // }
     if (location && !newName && !newPrice && !newDesc) {
-      console.log('тут4')
+
       device = await db.query(`update device set img = $1 where device_name = $2`, [location, oldName])
 
     }
     if (newDesc && !newName && !newPrice && !location) {
-      console.log('тут3')
+  
       device = await db.query(`update device set description = '${newDesc === ' ' ? '' : newDesc}' where device_name = '${oldName}'`)
     }
     if (newPrice && !newDesc && !newName && !location) {
