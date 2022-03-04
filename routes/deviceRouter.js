@@ -7,6 +7,6 @@ router.get('/', deviceController.getAll)
 router.get('/:id', deviceController.getOne)
 router.put('/', deviceController.updateCountEye)
 router.delete('/', deviceController.deleteDevice)
-// router.post('/price', deviceController.handlePrice)
+
 
 module.exports = router

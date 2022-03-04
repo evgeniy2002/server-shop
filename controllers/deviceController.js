@@ -41,7 +41,7 @@ class DeviceController {
   async getAll(req, res) {
     let device
 
-    let { brandId, typeOrder, orderBy, limit, page, maxPrice, lowerRange, upperRange, getBestseller } = req.query
+    let { brandId, typeOrder, orderBy, limit, page, maxPrice, getBestseller } = req.query
 
 
     page = page || 1
@@ -50,7 +50,7 @@ class DeviceController {
 
     if (brandId) {
    
-      device = await db.query(`select * from device where brand_id = $1 limit $2 offset $3`, [brandId, limit, offset])
+      device = await db.query(`select * from device where brand_id = $1 order by rating desc limit $2 offset $3`, [brandId, limit, offset])
     }
     if (typeOrder && orderBy) {
 
@@ -65,28 +65,17 @@ class DeviceController {
     if (maxPrice === '1') {
       device = await db.query(`select max(price) from device where brand_id = ${brandId}`)
     }
-    if (lowerRange && upperRange) {
- 
-        device = await db.query(`select * from device where brand_id = ${brandId} and price between ${lowerRange} and ${upperRange}`)
-      
 
-    }
     if (!brandId) {
-      device = await db.query(`select * from device where rating > 1 limit $1 offset $2`, [limit, offset])
+      device = await db.query(`select * from device where rating > 10 limit $1 offset $2`, [limit, offset])
     }
     if (getBestseller === 'true') {
-      device = await db.query(`select * from device where click_to_link > 1 limit $1 offset $2`, [limit, offset])
-      // console.log(device)
+      device = await db.query(`select * from device where click_to_link > 1 order by click_to_link desc limit $1 offset $2`, [limit, offset])
+
     }
     if (!Object.keys(req.query).length) {
       device = await db.query('select * from device')
     }
-
-
-    // if(getNewDevice = '1'){
-    //   const device = db.query(`SELECT id, (create_at > (current_timestamp - '1 day'::interval)) as "is_newly_added" FROM device where brand_id = '${brandId}'`)
-    //   console.log(device)
-    // }
 
 
 
@@ -126,14 +115,9 @@ class DeviceController {
       location = upload.Location
 
 
-      // device = await db.query(`update device set img = '${fileName}' where device_name = '${oldName}'`)
+      
     }
-    // if (newName.length, location !== null, newDesc.length, newPrice.length) {
-    //   console.log('тут5')
 
-    //   device = await db.query(`update device set device_name = $1, price = $2, img = $3, description = $4 where device_name = $5`,
-    //   [newName, newPrice, location, newDesc, oldName])
-    // }
     if (location && !newName && !newPrice && !newDesc) {
 
       device = await db.query(`update device set img = $1 where device_name = $2`, [location, oldName])

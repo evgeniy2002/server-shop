@@ -49,7 +49,7 @@ class BrandController {
     }
     if (brandOrder && !brandId) {
 
-      brand = await db.query('select brand.id, brand.brands_name, brand.img, type.type_name from brand, type where brand.type_id = type.id order by brands_name desc limit 10')
+      brand = await db.query('select brand.id, brand.brands_name, brand.img, type.type_name from brand, type where brand.type_id = type.id order by brand.rating desc limit 10')
     }
     res.json(brand.rows)
   }
