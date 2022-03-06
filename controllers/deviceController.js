@@ -49,13 +49,12 @@ class DeviceController {
     let offset = page * limit - limit
 
     if (brandId) {
-   
+
       device = await db.query(`select * from device where brand_id = $1 order by rating desc limit $2 offset $3`, [brandId, limit, offset])
     }
     if (typeOrder && orderBy) {
+      device = await db.query(`select * from device where brand_id = $1 order by ${typeOrder === 'low_price' ? 'price' : typeOrder} ${orderBy} limit $2 offset $3`, [brandId, limit, offset])
 
-        device = await db.query(`select * from device where brand_id = $1 order by ${typeOrder === 'low_price' ? 'price' : typeOrder} ${orderBy} limit $2 offset $3`, [brandId, limit, offset])
-      
 
       if (typeOrder === 'create_at') {
         device = await db.query(`select * from device where brand_id = $1 and create_at > (current_timestamp - '1 day'::interval) `, [brandId])
@@ -66,11 +65,11 @@ class DeviceController {
       device = await db.query(`select max(price) from device where brand_id = ${brandId}`)
     }
 
-    if (!brandId) {
-      device = await db.query(`select * from device where rating > 10 limit $1 offset $2`, [limit, offset])
+    if (!brandId && !getBestseller) {
+      device = await db.query(`select * from device where rating > 15 limit $1 offset $2`, [limit, offset])
     }
-    if (getBestseller === 'true') {
-      device = await db.query(`select * from device where click_to_link > 1 order by click_to_link desc limit $1 offset $2`, [limit, offset])
+    if (getBestseller === 'true' && !brandId) {
+      device = await db.query(`select * from device where click_to_link > 7 order by click_to_link desc limit $1 offset $2`, [limit, offset])
 
     }
     if (!Object.keys(req.query).length) {
@@ -115,7 +114,7 @@ class DeviceController {
       location = upload.Location
 
 
-      
+
     }
 
     if (location && !newName && !newPrice && !newDesc) {
@@ -124,7 +123,7 @@ class DeviceController {
 
     }
     if (newDesc && !newName && !newPrice && !location) {
-  
+
       device = await db.query(`update device set description = '${newDesc === ' ' ? '' : newDesc}' where device_name = '${oldName}'`)
     }
     if (newPrice && !newDesc && !newName && !location) {
@@ -159,7 +158,7 @@ class DeviceController {
       await db.query(`update device set rating = ${rating} where id = ${eyeId}`)
 
     }
-    if(linkId && !eyeId){
+    if (linkId && !eyeId) {
       await db.query(`update device set click_to_link = ${click_to_link} where id = ${linkId}`)
     }
     res.json(device)

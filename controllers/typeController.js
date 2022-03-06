@@ -51,11 +51,11 @@ class TypeController {
     if (typeId) {
       types = await db.query(`select * from type where id = ${typeId}`)
     }
-    if (!typeId) {
-      types = await db.query('select * from type')
+    if (!typeId && !typeOrder) {
+      types = await db.query('select * from type order by type_name desc')
     }
     if (!typeId && typeOrder) {
-      types = await db.query('select * from type where rating > 5 limit 9')
+      types = await db.query('select * from type where rating > 5 order by rating desc limit 9')
     }
     res.json(types.rows)
   }
