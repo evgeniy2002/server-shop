@@ -12,7 +12,7 @@ let s3 = new EasyYandexS3({
 
 class DeviceController {
   async create(req, res) {
-    let { name, price, brandId, desc } = req.body
+    let { name, price, brandId, desc, link_to_vk } = req.body
     let device, location
 
     if (req.files) {
@@ -26,12 +26,12 @@ class DeviceController {
     }
 
     if (!req.files) {
-      device = await db.query('insert into device(device_name, price, brand_id, description) values($1,$2,$3,$4) returning *',
-        [name, price, brandId, desc])
+      device = await db.query('insert into device(device_name, price, brand_id, description, link_to_vk) values($1,$2,$3,$4,$5) returning *',
+        [name, price, brandId, desc, link_to_vk])
     } else {
 
-      device = await db.query('insert into device(device_name, price, img, brand_id, description) values($1,$2,$3,$4,$5) returning *',
-        [name, price, location, brandId, desc])
+      device = await db.query('insert into device(device_name, price, img, brand_id, description, link_to_vk) values($1,$2,$3,$4,$5,$6) returning *',
+        [name, price, location, brandId, desc, link_to_vk])
     }
 
 
