@@ -66,7 +66,7 @@ class DeviceController {
     }
 
     if (!brandId && !getBestseller) {
-      device = await db.query(`select * from device where rating > 15 limit $1 offset $2`, [limit, offset])
+      device = await db.query(`select * from device where rating > 15 order by rating desc limit $1 offset $2`, [limit, offset])
     }
     if (getBestseller === 'true' && !brandId) {
       device = await db.query(`select * from device where click_to_link > 7 order by click_to_link desc limit $1 offset $2`, [limit, offset])
