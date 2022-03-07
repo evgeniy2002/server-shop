@@ -21,7 +21,7 @@ app.use('/api/admin', authRouter)
 app.use('/api/search', searchRouter)
 
 
-let PORT = process.env.PORT || 5000
+let PORT = process.env.PORT || 8080
 
 app.listen(PORT, (req, res) => console.log('server been started on ' + PORT))
 
