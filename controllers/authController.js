@@ -1,5 +1,5 @@
 const db = require('../db')
-const bcrypt = require('bcrypt');
+// const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
 
 class AuthController {
@@ -29,20 +29,20 @@ class AuthController {
       // const validPassword = bcrypt.compareSync(password, admin_password.rows[0].password);
 
       // console.log(validPassword)
-      if (bcrypt.compareSync(password, admin_password.rows[0].password)) {
-        const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
-        return res.status(200).json({ token: token })
-      } else {
-        return res.status(400).json({ message: 'invalid password' })
+      // if (bcrypt.compareSync(password, admin_password.rows[0].password)) {
+      //   const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
+      //   return res.status(200).json({ token: token })
+      // } else {
+        
+      // }
+      // if(!validPassword){
+      //   return res.status(400).json({ message: 'invalid password' })
+      // }
+       if(admin_id.rows.length){
+         const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
+         return res.status(200).json({ token: token })
 
-      }
-      //   if(!validPassword){
-      //   }
-      //  if(admin_id.rows.length){
-      //    const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
-      //    return res.status(200).json({ token: token })
-
-      //  }
+       }
 
     } catch (e) {
 
