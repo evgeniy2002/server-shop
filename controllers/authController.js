@@ -24,20 +24,28 @@ class AuthController {
 
       const admin_password = await db.query('select password from admin_user where user_name = $1', [login])
       const admin_id = await db.query('select id from admin_user where user_name = $1', [login])
-  
-      const validPassword = bcrypt.compare(password, admin_password.rows[0].password);
-   
-      if(!validPassword){
-        return res.status(400).json({message: 'invalid password'})
-      }
-     if(admin_id.rows.length){
-       const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
-       return res.status(200).json({ token: token })
 
-     }
+      // console.log(admin_password.rows)
+      // const validPassword = bcrypt.compareSync(password, admin_password.rows[0].password);
+
+      // console.log(validPassword)
+      if (bcrypt.compareSync(password, admin_password.rows[0].password)) {
+        const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
+        return res.status(200).json({ token: token })
+      } else {
+        return res.status(400).json({ message: 'invalid password' })
+
+      }
+      //   if(!validPassword){
+      //   }
+      //  if(admin_id.rows.length){
+      //    const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
+      //    return res.status(200).json({ token: token })
+
+      //  }
 
     } catch (e) {
-     
+
       res.status(400).json({ message: 'login error' })
     }
   }
