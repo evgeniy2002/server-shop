@@ -10,11 +10,6 @@ const brandRouter = require('./routes/brandRouter')
 const authRouter = require('./routes/authRouter')
 const path = require('path')
 
-// const domainsFromEnv = process.env.CORS_DOMAINS || ""
-
-// const whitelist = domainsFromEnv.split(",").map(item => item.trim())
-
-
 app.use(
   cors({
     // origin: ["https://murmuring-beyond-94675.herokuapp.com"],
@@ -25,24 +20,9 @@ app.use(
 );
 app.use(express.json())
 
-
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (!origin || whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error("Not allowed by CORS"))
-//     }
-//   },
-//   credentials: true,
-// }
-
-// app.use(cors({ origin: "https://murmuring-beyond-94675.herokuapp.com/", credentials: true }))
-// app.use(cors(corsOptions))
-
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
-app.use('/api/admin', authRouter)
+app.use('/api/admin_panel', authRouter)
 app.use('/api/type', typeRouter)
 app.use('/api/device', deviceRouter)
 app.use('/api/brand', brandRouter)
