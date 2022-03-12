@@ -10,8 +10,19 @@ const brandRouter = require('./routes/brandRouter')
 const authRouter = require('./routes/authRouter')
 const path = require('path')
 
-app.use(cors())
 app.use(express.json())
+app.use(cors())
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+app.use('/api', createProxyMiddleware({ 
+  target: 'https://murmuring-beyond-94675.herokuapp.com/', //original url
+  changeOrigin: true, 
+  //secure: false,
+  onProxyRes: function (proxyRes, req, res) {
+     proxyRes.headers['Access-Control-Allow-Origin'] = '*';
+  }
+}));
+
 app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
 app.use('/api/type', typeRouter)
@@ -20,11 +31,6 @@ app.use('/api/brand', brandRouter)
 app.use('/api/search', searchRouter)
 app.use('/api/admin', authRouter)
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
 
 
 let PORT = process.env.PORT || 8080
