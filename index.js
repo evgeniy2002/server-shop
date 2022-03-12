@@ -17,7 +17,7 @@ app.use(express.json())
 //   methods: ['GET','POST','PUT']
 // }))
 
-app.use(cors({ origin: "https://shrouded-reaches-17656.herokuapp.com/", credentials: true }))
+app.use(cors({ origin: "https://murmuring-beyond-94675.herokuapp.com/", credentials: true }))
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
