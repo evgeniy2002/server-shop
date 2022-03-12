@@ -12,17 +12,6 @@ const path = require('path')
 
 app.use(express.json())
 app.use(cors())
-const { createProxyMiddleware } = require('http-proxy-middleware');
-
-app.use('/api', createProxyMiddleware({ 
-  target: 'https://murmuring-beyond-94675.herokuapp.com/', //original url
-  changeOrigin: true, 
-  //secure: false,
-  onProxyRes: function (proxyRes, req, res) {
-     proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-  }
-}));
-
 app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
 app.use('/api/type', typeRouter)
