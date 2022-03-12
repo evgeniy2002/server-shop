@@ -15,14 +15,13 @@ const path = require('path')
 // const whitelist = domainsFromEnv.split(",").map(item => item.trim())
 
 
-app.use(
-  cors({
-    origin: ["https://murmuring-beyond-94675.herokuapp.com"],
-    methods: ["GET", "POST", "DELETE"],
-    credentials: true,
-    origin: true,
-  })
-);
+app.use((req, res, next) => {
+  res.append('Access-Control-Allow-Origin', ['*']);
+  res.append('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.append('Access-Control-Allow-Headers', 'Content-Type');
+  next();
+});
+
 app.use(express.json())
 
 
