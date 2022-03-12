@@ -10,6 +10,11 @@ const brandRouter = require('./routes/brandRouter')
 const authRouter = require('./routes/authRouter')
 const path = require('path')
 
+const domainsFromEnv = process.env.CORS_DOMAINS || ""
+
+const whitelist = domainsFromEnv.split(",").map(item => item.trim())
+
+
 app.use(express.json())
 // app.use(cors({
 //   // origin: 'https://murmuring-beyond-94675.herokuapp.com',
@@ -17,7 +22,6 @@ app.use(express.json())
 //   methods: ['GET','POST','PUT']
 // }))
 
-const whitelist = ["https://murmuring-beyond-94675.herokuapp.com"]
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || whitelist.indexOf(origin) !== -1) {
