@@ -26,7 +26,7 @@ class AuthController {
       const admin_id = await db.query('select id from admin_user where user_name = $1', [login])
 
       // console.log(admin_password.rows)
-      // const validPassword = bcrypt.compareSync(password, admin_password.rows[0].password);
+      const validPassword = bcrypt.compareSync(password, admin_password.rows[0].password);
 
       // console.log(validPassword)
       // if (bcrypt.compareSync(password, admin_password.rows[0].password)) {
@@ -35,9 +35,9 @@ class AuthController {
       // } else {
         
       // }
-      // if(!validPassword){
-      //   return res.status(400).json({ message: 'invalid password' })
-      // }
+      if(!validPassword){
+        return res.status(400).json({ message: 'invalid password' })
+      }
        if(admin_id.rows.length){
          const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
          return res.status(200).json({ token: token })
