@@ -17,9 +17,9 @@ const path = require('path')
 
 app.use(
   cors({
-    origin: ["https://murmuring-beyond-94675.herokuapp.com"],
-    methods: ["GET", "POST", "DELETE"],
-    credentials: true,
+    // origin: ["https://murmuring-beyond-94675.herokuapp.com"],
+    // methods: ["GET", "POST", "DELETE"],
+    // credentials: true,
     origin: true,
   })
 );
@@ -42,11 +42,11 @@ app.use(express.json())
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
+app.use('/api/admin', authRouter)
 app.use('/api/type', typeRouter)
 app.use('/api/device', deviceRouter)
 app.use('/api/brand', brandRouter)
 app.use('/api/search', searchRouter)
-app.use('/api/admin', authRouter)
 
 
 
