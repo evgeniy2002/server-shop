@@ -10,14 +10,8 @@ const brandRouter = require('./routes/brandRouter')
 const authRouter = require('./routes/authRouter')
 const path = require('path')
 
-app.use(
-  cors({
-    // origin: ["https://murmuring-beyond-94675.herokuapp.com"],
-    // methods: ["GET", "POST", "DELETE"],
-    // credentials: true,
-    origin: true,
-  })
-);
+app.use(cors())
+
 app.use(express.json())
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
