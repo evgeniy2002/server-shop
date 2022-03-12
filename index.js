@@ -10,31 +10,35 @@ const brandRouter = require('./routes/brandRouter')
 const authRouter = require('./routes/authRouter')
 const path = require('path')
 
-const domainsFromEnv = process.env.CORS_DOMAINS || ""
+// const domainsFromEnv = process.env.CORS_DOMAINS || ""
 
-const whitelist = domainsFromEnv.split(",").map(item => item.trim())
+// const whitelist = domainsFromEnv.split(",").map(item => item.trim())
 
 
+app.use(
+  cors({
+    origin: ["https://murmuring-beyond-94675.herokuapp.com"],
+    methods: ["GET", "POST", "DELETE"],
+    credentials: true,
+    origin: true,
+  })
+);
 app.use(express.json())
-// app.use(cors({
-//   // origin: 'https://murmuring-beyond-94675.herokuapp.com',
-//   origin: '*',
-//   methods: ['GET','POST','PUT']
-// }))
 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error("Not allowed by CORS"))
-    }
-  },
-  credentials: true,
-}
+
+// const corsOptions = {
+//   origin: function (origin, callback) {
+//     if (!origin || whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error("Not allowed by CORS"))
+//     }
+//   },
+//   credentials: true,
+// }
 
 // app.use(cors({ origin: "https://murmuring-beyond-94675.herokuapp.com/", credentials: true }))
-app.use(cors(corsOptions))
+// app.use(cors(corsOptions))
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
