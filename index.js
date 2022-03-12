@@ -17,7 +17,20 @@ app.use(express.json())
 //   methods: ['GET','POST','PUT']
 // }))
 
-app.use(cors({ origin: "https://murmuring-beyond-94675.herokuapp.com/", credentials: true }))
+const whitelist = ["https://murmuring-beyond-94675.herokuapp.com"]
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error("Not allowed by CORS"))
+    }
+  },
+  credentials: true,
+}
+
+// app.use(cors({ origin: "https://murmuring-beyond-94675.herokuapp.com/", credentials: true }))
+app.use(cors(corsOptions))
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
