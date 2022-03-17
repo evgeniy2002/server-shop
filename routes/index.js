@@ -10,6 +10,6 @@ router.use('/type', typeRouter)
 router.use('/device', deviceRouter)
 router.use('/search', searchRouter)
 router.use('/brand', brandRouter)
-router.use('/admin', authRouter)
+router.use('/admin_panel', authRouter)
 
 module.exports = router

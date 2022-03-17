@@ -16,11 +16,11 @@ app.use(cors())
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
-app.use('/api/admin_panel', authRouter)
 app.use('/api/type', typeRouter)
 app.use('/api/device', deviceRouter)
 app.use('/api/brand', brandRouter)
 app.use('/api/search', searchRouter)
+app.use('/api/admin_panel', authRouter)
 
 
 

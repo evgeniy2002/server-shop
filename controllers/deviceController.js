@@ -66,10 +66,10 @@ class DeviceController {
     }
 
     if (!brandId && !getBestseller) {
-      device = await db.query(`select * from device where rating > 15 order by rating desc limit $1 offset $2`, [limit, offset])
+      device = await db.query(`select * from device where rating > 7 order by rating desc limit $1 offset $2`, [limit, offset])
     }
     if (getBestseller === 'true' && !brandId) {
-      device = await db.query(`select * from device where click_to_link > 7 order by click_to_link desc limit $1 offset $2`, [limit, offset])
+      device = await db.query(`select * from device where click_to_link > 4 order by click_to_link desc limit $1 offset $2`, [limit, offset])
 
     }
     if (!Object.keys(req.query).length) {
@@ -99,7 +99,7 @@ class DeviceController {
 
     const { eyeId, linkId, rating, click_to_link } = req.query
 
-    const { newName, oldName, newDesc, newPrice, availabelProduct } = req.body
+    const { newName, oldName, newDesc, newPrice, availabelProduct, newLinkVk } = req.body
 
     let device, location
 
@@ -152,7 +152,10 @@ class DeviceController {
     if (availabelProduct) {
       await db.query(`update device set product_availability = '${availabelProduct === 'есть' ? true : false}' where device_name = $1`, [oldName])
     }
-
+    if(newLinkVk){
+      
+      await db.query(`update device set link_to_vk = $1 where device_name = $2`, [newLinkVk, oldName])
+    }
 
     if (eyeId) {
       await db.query(`update device set rating = ${rating} where id = ${eyeId}`)
