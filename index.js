@@ -12,7 +12,14 @@ const authRouter = require('./routes/authRouter')
 const path = require('path')
 
 
-app.use(cors());
+app.use(cors({
+  credentials: true,
+  origin: '*',
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'], // to works well with web app, OPTIONS is required
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.options('*', cors())
 app.use(express.json())
 
 const corsConfig = {
