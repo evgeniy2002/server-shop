@@ -14,7 +14,7 @@ const path = require('path')
 app.use(express.json())
 
 const corsConfig = {
-  origin: 'https://murmuring-beyond-94675.herokuapp.com',
+  origin: 'https://murmuring-beyond-94675.herokuapp.com/',
   credentials: true,
 };
 
