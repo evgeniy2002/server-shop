@@ -47,11 +47,11 @@ app.use(fileUpload({}))
 //   next();
 // });
 
-app.use('/api/type', cors(), typeRouter)
-app.use('/api/device', cors(), deviceRouter)
-app.use('/api/brand', cors(), brandRouter)
-app.use('/api/search', cors(), searchRouter)
-app.use('/api/admin_panel', cors(), authRouter)
+app.use('/api/type', typeRouter)
+app.use('/api/device',deviceRouter)
+app.use('/api/brand', brandRouter)
+app.use('/api/search', searchRouter)
+app.use('/api/admin_panel', authRouter)
 
 
 
