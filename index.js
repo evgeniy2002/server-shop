@@ -11,8 +11,11 @@ const authRouter = require('./routes/authRouter')
 const path = require('path')
 
 
-app.use(cors())
 app.use(express.json())
+app.use(cors({
+  origin: 'https://murmuring-beyond-94675.herokuapp.com/',
+  origin: true
+}))
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
