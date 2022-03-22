@@ -13,8 +13,8 @@ const path = require('path')
 
 app.use(express.json())
 app.use(cors({
-  origin: 'https://murmuring-beyond-94675.herokuapp.com/',
-  origin: true
+  origin: 'https://murmuring-beyond-94675.herokuapp.com',
+  credentials: true
 }))
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
