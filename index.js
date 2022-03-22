@@ -15,13 +15,10 @@ app.use(express.json())
 
 const corsConfig = {
   origin: 'https://murmuring-beyond-94675.herokuapp.com/',
-  credentials: true,
-  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'], // to works well with web app, OPTIONS is required
-  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
-app.use(cors(corsConfig));
-app.options('*', cors(corsConfig));
+app.use(cors());
+// app.options('*', cors(corsConfig));
 // app.use(cors({
 //   origin: 'https://murmuring-beyond-94675.herokuapp.com',
 //   credentials: true
@@ -29,6 +26,19 @@ app.options('*', cors(corsConfig));
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
+
+app.use(function (req, res, next) {
+
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+
+  res.setHeader('Access-Control-Allow-Credentials', true);
+
+  // Pass to next layer of middleware
+  next();
+});
+
 app.use('/api/type', cors(), typeRouter)
 app.use('/api/device', cors(), deviceRouter)
 app.use('/api/brand', cors(), brandRouter)
