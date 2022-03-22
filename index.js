@@ -4,6 +4,7 @@ const cors = require('cors')
 const app = express()
 const fileUpload = require('express-fileupload')
 const searchRouter = require('./routes/searchRouter')
+const router = require('./routes/index')
 const typeRouter = require('./routes/typeRouter')
 const deviceRouter = require('./routes/deviceRouter')
 const brandRouter = require('./routes/brandRouter')
@@ -11,6 +12,7 @@ const authRouter = require('./routes/authRouter')
 const path = require('path')
 
 
+app.use(cors());
 app.use(express.json())
 
 const corsConfig = {
@@ -18,7 +20,6 @@ const corsConfig = {
   // credentials: true,
 };
 
-app.use(cors(corsConfig));
 // app.options('*', cors(corsConfig));
 // app.use(cors({
 //   origin: 'https://murmuring-beyond-94675.herokuapp.com',
@@ -27,11 +28,13 @@ app.use(cors(corsConfig));
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
-app.use('/api/type', typeRouter)
-app.use('/api/device', deviceRouter)
-app.use('/api/brand', brandRouter)
-app.use('/api/search', searchRouter)
-app.use('/api/admin_panel', authRouter)
+
+app.use('/api', router)
+// app.use('/api/type', typeRouter)
+// app.use('/api/device', deviceRouter)
+// app.use('/api/brand', brandRouter)
+// app.use('/api/search', searchRouter)
+// app.use('/api/admin_panel', authRouter)
 
 
 
