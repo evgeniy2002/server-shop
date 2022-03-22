@@ -12,10 +12,18 @@ const path = require('path')
 
 
 app.use(express.json())
-app.use(cors({
-  origin: 'https://murmuring-beyond-94675.herokuapp.com',
-  credentials: true
-}))
+
+const corsConfig = {
+  origin: true,
+  credentials: true,
+};
+
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
+// app.use(cors({
+//   origin: 'https://murmuring-beyond-94675.herokuapp.com',
+//   credentials: true
+// }))
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
