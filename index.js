@@ -38,7 +38,8 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(cors());
+app.options("*", cors({ origin: 'https://murmuring-beyond-94675.herokuapp.com', optionsSuccessStatus: 200 }));
+app.use(cors({ origin: "https://murmuring-beyond-94675.herokuapp.com", optionsSuccessStatus: 200 }));
 // app.options('*', cors(corsConfig));
 // app.use(cors({
 //   origin: 'https://murmuring-beyond-94675.herokuapp.com',
