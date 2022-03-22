@@ -36,7 +36,7 @@ const corsConfig = {
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
 
-app.use('/api', router)
+app.use('/api', cors(), router)
 // app.use('/api/type', typeRouter)
 // app.use('/api/device', deviceRouter)
 // app.use('/api/brand', brandRouter)
