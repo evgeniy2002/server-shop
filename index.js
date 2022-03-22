@@ -15,10 +15,13 @@ app.use(express.json())
 
 const corsConfig = {
   origin: 'https://murmuring-beyond-94675.herokuapp.com/',
+  credentials: true,
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'], // to works well with web app, OPTIONS is required
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
-app.use(cors());
-// app.options('*', cors(corsConfig));
+app.use(cors(corsConfig));
+app.options('*', cors(corsConfig));
 // app.use(cors({
 //   origin: 'https://murmuring-beyond-94675.herokuapp.com',
 //   credentials: true
