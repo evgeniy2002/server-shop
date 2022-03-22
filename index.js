@@ -16,6 +16,8 @@ app.use(express.json())
 const corsConfig = {
   origin: '*',
   credentials: true,
+  methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'], // to works well with web app, OPTIONS is required
+  allowedHeaders: ['Content-Type', 'Authorization']
 };
 
 app.use(cors(corsConfig));
@@ -27,11 +29,11 @@ app.options('*', cors(corsConfig));
 
 // app.use(express.static(path.resolve(__dirname, 'static')))
 app.use(fileUpload({}))
-app.use('/api/type',cors(), typeRouter)
-app.use('/api/device',cors(), deviceRouter)
-app.use('/api/brand',cors(), brandRouter)
-app.use('/api/search',cors(), searchRouter)
-app.use('/api/admin_panel',cors(), authRouter)
+app.use('/api/type', cors(), typeRouter)
+app.use('/api/device', cors(), deviceRouter)
+app.use('/api/brand', cors(), brandRouter)
+app.use('/api/search', cors(), searchRouter)
+app.use('/api/admin_panel', cors(), authRouter)
 
 
 
