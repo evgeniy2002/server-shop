@@ -16,11 +16,6 @@ const router = require('./routes/index')
 
 
 
-app.use(cors())
-app.use(express.json())
-
-// app.use('/api', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com', changeOrigin: true }));
-
 app.use(function (req, res, next) {
 
   res.setHeader('Access-Control-Allow-Origin', 'https://murmuring-beyond-94675.herokuapp.com');
@@ -31,6 +26,11 @@ app.use(function (req, res, next) {
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
+app.use(cors())
+app.use(express.json())
+
+// app.use('/api', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com', changeOrigin: true }));
+
 
 app.use('/api', router)
 
