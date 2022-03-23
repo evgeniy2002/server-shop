@@ -21,43 +21,43 @@ app.use(cors({
   origin: "https://murmuring-beyond-94675.herokuapp.com",
 }))
 app.use(express.json())
-// app.options("*", cors({ origin: 'https://murmuring-beyond-94675.herokuapp.com', optionsSuccessStatus: 200 }));
 
 
 
-app.use('/api/type', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com', changeOrigin: true }));
+app.use('/api/type', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com/api/type', changeOrigin: true }));
 
 app.use(function (req, res, next) {
-
+  
   res.setHeader('Access-Control-Allow-Origin', 'https://murmuring-beyond-94675.herokuapp.com');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-
-
+  
+  
   res.setHeader('Access-Control-Allow-Credentials', true);
   next();
 });
 
 app.use('/api', router)
+// app.options("*", cors({ origin: 'https://murmuring-beyond-94675.herokuapp.com', optionsSuccessStatus: 200 }));
 
 // app.use(
-//   proxy('/api/type', {
-//     target: 'https://shrouded-reaches-17656.herokuapp.com/api/type',
-//     secure: false,
-//     changeOrigin: true
-//   })
-//   )
-  
-  // app.use('/api/type', {
-  
-// })
-app.use('/api/device',deviceRouter)
-app.use('/api/brand', brandRouter)
-app.use('/api/search', searchRouter)
-app.use('/api/admin_panel', authRouter)
-
-
-// const corsConfig = {
+  //   proxy('/api/type', {
+    //     target: 'https://shrouded-reaches-17656.herokuapp.com/api/type',
+    //     secure: false,
+    //     changeOrigin: true
+    //   })
+    //   )
+    
+    // app.use('/api/type', {
+      
+      // })
+      app.use('/api/device',deviceRouter)
+      app.use('/api/brand', brandRouter)
+      app.use('/api/search', searchRouter)
+      app.use('/api/admin_panel', authRouter)
+      
+      
+      // const corsConfig = {
   //   origin: 'https://murmuring-beyond-94675.herokuapp.com/',
   //   credentials: true,
   //   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'], // to works well with web app, OPTIONS is required
