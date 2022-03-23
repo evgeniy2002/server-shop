@@ -1,6 +1,6 @@
 const db = require('../db')
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt');
 
 class AuthController {
   // async registration(req, res) {
@@ -22,8 +22,8 @@ class AuthController {
     try {
       const { login, password } = req.body
 
-      const admin_password = await db.query('select password from admin_user where user_name = $1', [login])
       const admin_id = await db.query('select id from admin_user where user_name = $1', [login])
+      const admin_password = await db.query('select password from admin_user where user_name = $1', [login])
 
 
       // const matchPassword = async (enteredpassword, oldPassword) => {
@@ -37,16 +37,16 @@ class AuthController {
       // console.log(admin_password.rows)
       
       // console.log(validPassword)
+      if(admin_id.rows.length){
+        const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
+        return res.status(200).json({ token: token })
+
+      }
       const validPassword = bcrypt.compareSync(password, admin_password.rows[0].password);
     
       if(!validPassword){
         return res.status(400).json({ message: 'invalid password' })
       }
-       if(admin_id.rows.length){
-         const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
-         return res.status(200).json({ token: token })
-
-       }
 
     } catch (e) {
 
