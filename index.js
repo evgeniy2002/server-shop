@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const { createProxyMiddleware } = require('http-proxy-middleware');
+// const { createProxyMiddleware } = require('http-proxy-middleware');
 
 
 const app = express()
@@ -19,7 +19,18 @@ const router = require('./routes/index')
 app.use(cors())
 app.use(express.json())
 
-app.use('/api', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com', changeOrigin: true }));
+// app.use('/api', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com', changeOrigin: true }));
+
+app.use(function (req, res, next) {
+
+  res.setHeader('Access-Control-Allow-Origin', 'https://murmuring-beyond-94675.herokuapp.com');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+  res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+
+
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  next();
+});
 
 app.use('/api', router)
 
