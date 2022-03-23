@@ -9,6 +9,7 @@ const deviceRouter = require('./routes/deviceRouter')
 const brandRouter = require('./routes/brandRouter')
 const authRouter = require('./routes/authRouter')
 const path = require('path')
+const router = require('./routes/index')
 
 app.use(cors())
 app.use(express.json())
@@ -62,12 +63,12 @@ app.use(express.json())
 //   res.setHeader('Access-Control-Allow-Credentials', true);
 //   next();
 // });
-
-app.use('/api/type', typeRouter)
-app.use('/api/device',deviceRouter)
-app.use('/api/brand', brandRouter)
-app.use('/api/search', searchRouter)
-app.use('/api/admin_panel', authRouter)
+app.use('/api', router)
+// app.use('/api/type', typeRouter)
+// app.use('/api/device',deviceRouter)
+// app.use('/api/brand', brandRouter)
+// app.use('/api/search', searchRouter)
+// app.use('/api/admin_panel', authRouter)
 
 
 
