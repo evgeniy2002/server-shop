@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const proxy = require('http-proxy-middleware');
+const {createProxyMiddleware} = require('http-proxy-middleware');
 
 
 const app = express()
@@ -25,7 +25,7 @@ app.use(express.json())
 
 
 
-// app.use('/api', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com', changeOrigin: true }));
+app.use('/api/type', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com', changeOrigin: true }));
 
 app.use(function (req, res, next) {
 
@@ -40,13 +40,13 @@ app.use(function (req, res, next) {
 
 app.use('/api', router)
 
-app.use(
-  proxy('/api/type', {
-    target: 'https://shrouded-reaches-17656.herokuapp.com/api/type',
-    secure: false,
-    changeOrigin: true
-  })
-  )
+// app.use(
+//   proxy('/api/type', {
+//     target: 'https://shrouded-reaches-17656.herokuapp.com/api/type',
+//     secure: false,
+//     changeOrigin: true
+//   })
+//   )
   
   // app.use('/api/type', {
   
