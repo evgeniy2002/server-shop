@@ -47,9 +47,9 @@ app.use(
   })
 )
 
-app.use('/api/type', {
+// app.use('/api/type', {
   
-})
+// })
 app.use('/api/device',deviceRouter)
 app.use('/api/brand', brandRouter)
 app.use('/api/search', searchRouter)
