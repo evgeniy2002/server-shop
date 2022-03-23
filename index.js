@@ -21,8 +21,8 @@ app.use(express.json())
 
 app.use('/api', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com', changeOrigin: true }));
 
+app.use('/api', router)
 
-// app.use('/api', cors(), router)
 
 
 // const corsConfig = {
