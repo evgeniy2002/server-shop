@@ -16,6 +16,7 @@ const router = require('./routes/index')
 
 
 
+app.use(express.json())
 app.use(cors({
   origin: true,
   credentials: true,
@@ -26,7 +27,6 @@ app.use(cors({
 app.options("*", cors({ origin: 'https://murmuring-beyond-94675.herokuapp.com', optionsSuccessStatus: 200 }));
 
 
-app.use(express.json())
 
 app.use(function (req, res, next) {
 
