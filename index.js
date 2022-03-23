@@ -1,7 +1,6 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
-const {createProxyMiddleware} = require('http-proxy-middleware');
 
 
 const app = express()
@@ -23,21 +22,21 @@ app.use(cors({
 app.use(express.json())
 
 
-
-app.use('/api/type', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com/api/type', changeOrigin: true }));
-
-app.use(function (req, res, next) {
-  
-  res.setHeader('Access-Control-Allow-Origin', 'https://murmuring-beyond-94675.herokuapp.com');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-  res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-  
-  
-  res.setHeader('Access-Control-Allow-Credentials', true);
-  next();
-});
-
 app.use('/api', router)
+
+// app.use('/api/type', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com/api/type', changeOrigin: true }));
+
+// app.use(function (req, res, next) {
+  
+//   res.setHeader('Access-Control-Allow-Origin', 'https://murmuring-beyond-94675.herokuapp.com');
+//   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+//   res.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+  
+  
+//   res.setHeader('Access-Control-Allow-Credentials', true);
+//   next();
+// });
+
 // app.options("*", cors({ origin: 'https://murmuring-beyond-94675.herokuapp.com', optionsSuccessStatus: 200 }));
 
 // app.use(
@@ -51,10 +50,10 @@ app.use('/api', router)
     // app.use('/api/type', {
       
       // })
-      app.use('/api/device',deviceRouter)
-      app.use('/api/brand', brandRouter)
-      app.use('/api/search', searchRouter)
-      app.use('/api/admin_panel', authRouter)
+      // app.use('/api/device',deviceRouter)
+      // app.use('/api/brand', brandRouter)
+      // app.use('/api/search', searchRouter)
+      // app.use('/api/admin_panel', authRouter)
       
       
       // const corsConfig = {
