@@ -1,21 +1,28 @@
 require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+
 const app = express()
-const fileUpload = require('express-fileupload')
-const searchRouter = require('./routes/searchRouter')
-const typeRouter = require('./routes/typeRouter')
-const deviceRouter = require('./routes/deviceRouter')
-const brandRouter = require('./routes/brandRouter')
-const authRouter = require('./routes/authRouter')
-const path = require('path')
+// const fileUpload = require('express-fileupload')
+// const searchRouter = require('./routes/searchRouter')
+// const typeRouter = require('./routes/typeRouter')
+// const deviceRouter = require('./routes/deviceRouter')
+// const brandRouter = require('./routes/brandRouter')
+// const authRouter = require('./routes/authRouter')
+// const path = require('path')
 const router = require('./routes/index')
 
 
 
 app.use(cors())
 app.use(express.json())
-app.use('/api', cors(), router)
+
+app.use('/api', createProxyMiddleware({ target: 'https://shrouded-reaches-17656.herokuapp.com', changeOrigin: true }));
+
+
+// app.use('/api', cors(), router)
 
 
 // const corsConfig = {
