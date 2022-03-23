@@ -12,15 +12,16 @@ const path = require('path')
 const router = require('./routes/index')
 
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
 
 app.use(cors())
 app.use(express.json())
+app.use('/api', router)
 
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://murmuring-beyond-94675.herokuapp.com/api");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
 // const corsConfig = {
 //   origin: 'https://murmuring-beyond-94675.herokuapp.com/',
 //   credentials: true,
@@ -70,7 +71,6 @@ app.use(express.json())
 //   res.setHeader('Access-Control-Allow-Credentials', true);
 //   next();
 // });
-app.use('/api', router)
 // app.use('/api/type', typeRouter)
 // app.use('/api/device',deviceRouter)
 // app.use('/api/brand', brandRouter)
