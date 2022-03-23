@@ -20,8 +20,12 @@ app.use(cors({
   origin: true,
   credentials: true,
   methods: ['GET', 'PUT', 'POST', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 200
 }))
+app.options("*", cors({ origin: 'https://murmuring-beyond-94675.herokuapp.com', optionsSuccessStatus: 200 }));
+
+
 app.use(express.json())
 
 app.use(function (req, res, next) {
@@ -66,7 +70,6 @@ app.use('/api', router)
 //   next();
 // });
 
-// app.options("*", cors({ origin: 'https://murmuring-beyond-94675.herokuapp.com', optionsSuccessStatus: 200 }));
 // app.use(cors({ origin: "https://murmuring-beyond-94675.herokuapp.com", optionsSuccessStatus: 200 }));
 
 // app.options('*', cors(corsConfig));
