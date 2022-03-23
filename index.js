@@ -15,7 +15,7 @@ const router = require('./routes/index')
 
 app.use(cors())
 app.use(express.json())
-app.use(router)
+app.use('/api', router)
 
 app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Origin", "https://murmuring-beyond-94675.herokuapp.com");
