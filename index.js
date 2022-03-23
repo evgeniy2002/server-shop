@@ -42,7 +42,7 @@ app.use('/api', router)
 
 app.use(
   proxy('/api/type', {
-    target: 'https://shrouded-reaches-17656.herokuapp.com',
+    target: 'https://shrouded-reaches-17656.herokuapp.com/api/type',
     secure: false,
     changeOrigin: true
   })
