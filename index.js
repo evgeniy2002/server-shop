@@ -16,7 +16,7 @@ const router = require('./routes/index')
 
 
 const corsOptions = {
-  "origin": false,
+  "origin": "*",
   "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
   "preflightContinue": false,
   "optionsSuccessStatus": 204,
