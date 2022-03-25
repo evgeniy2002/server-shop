@@ -1,6 +1,6 @@
 const db = require('../db')
 const jwt = require('jsonwebtoken')
-// const bcrypt = require('bcrypt');
+const bcrypt = require('bcrypt');
 
 class AuthController {
   // async registration(req, res) {
@@ -42,11 +42,11 @@ class AuthController {
         return res.status(200).json({ token: token })
 
       }
-      // const validPassword = bcrypt.compareSync(password, admin_password.rows[0].password);
+      const validPassword = bcrypt.compareSync(password, admin_password.rows[0].password);
     
-      // if(!validPassword){
-      //   return res.status(400).json({ message: 'invalid password' })
-      // }
+      if(!validPassword){
+        return res.status(400).json({ message: 'invalid password' })
+      }
 
     } catch (e) {
 
