@@ -41,7 +41,7 @@ class DeviceController {
   async getAll(req, res) {
     let device
 
-    let { brandId, typeOrder, orderBy, limit, page, maxPrice, getBestseller } = req.query
+    let { brandId, typeOrder, orderBy, limit, page, maxPrice, getBestseller, getNewDevice } = req.query
 
 
     page = page || 1
@@ -71,6 +71,9 @@ class DeviceController {
     if (getBestseller === 'true' && !brandId) {
       device = await db.query(`select * from device where click_to_link > 4 order by click_to_link desc limit $1 offset $2`, [limit, offset])
 
+    }
+    if(getNewDevice === 'true' && !brandId){
+      device = await db.query(`select * from device where create_at > (current_timestamp - '3 day'::interval) order by rating desc limit $1 offset $2`, [limit, offset])
     }
     if (!Object.keys(req.query).length) {
       device = await db.query('select * from device')
