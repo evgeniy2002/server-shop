@@ -35,18 +35,15 @@ class AuthController {
 
       // }
       // console.log(admin_password.rows)
-      
-      // console.log(validPassword)
-      if(admin_id.rows.length){
-        const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
-        return res.status(200).json({ token: token })
 
-      }
+      // console.log(validPassword)
       const validPassword = bcrypt.compareSync(password, admin_password.rows[0].password);
-    
-      if(!validPassword){
+
+      if (!validPassword) {
         return res.status(400).json({ message: 'invalid password' })
       }
+      const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
+      return res.status(200).json({ token: token })
 
     } catch (e) {
 
