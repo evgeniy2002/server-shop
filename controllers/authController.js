@@ -42,10 +42,10 @@ class AuthController {
       // if (!validPassword) {
       //   return res.status(400).json({ message: 'invalid password' })
       // }
-      if (admin_id.rows[0].length) {
-
+      if(admin_id.rows.length){
         const token = jwt.sign({ id: admin_id }, process.env.JWT_SECRET_KEY, { expiresIn: '24h' })
         return res.status(200).json({ token: token })
+
       }
 
     } catch (e) {
