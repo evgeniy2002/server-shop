@@ -8,5 +8,4 @@ router.get('/:id', deviceController.getOne)
 router.put('/', deviceController.updateCountEye)
 router.delete('/', deviceController.deleteDevice)
 
-
 module.exports = router
