@@ -95,8 +95,9 @@ class DeviceController {
     const id = req.params.id
 
     const device = await db.query('select * from device where id = $1', [id])
+    const info = await db.query('select * from device_character where device_id = $1', [id])
 
-    res.json(device.rows[0])
+    res.json([device.rows[0], info.rows])
   }
 
   async updateCountEye(req, res) {
