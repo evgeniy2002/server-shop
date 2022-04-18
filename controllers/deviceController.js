@@ -123,18 +123,18 @@ class DeviceController {
 
     }
 
-    // if (updateInfo) {
-    //   id = await db.query('select id from device where device_name = $1', [oldName])
-    //   updateInfo = JSON.parse(updateInfo)
+    if (updateInfo) {
+      id = await db.query('select id from device where device_name = $1', [oldName])
+      updateInfo = JSON.parse(updateInfo)
       
-    //   // db.query('delete from device_character where device_id = $1', [id.rows[0].id])
+      // db.query('delete from device_character where device_id = $1', [id.rows[0].id])
      
-    //   updateInfo.forEach(i => {
-    //     db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
-    //       [i.title, i.description, id.rows[0].id])
-    //   })
+      updateInfo.forEach(i => {
+        db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
+          [i.title, i.description, id.rows[0].id])
+      })
 
-    // }
+    }
 
     if (location && !newName && !newPrice && !newDesc) {
 
