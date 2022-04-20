@@ -105,7 +105,8 @@ class DeviceController {
 
     const { eyeId, linkId, rating, click_to_link } = req.query
 
-    let { newName, oldName, newDesc, newPrice, availabelProduct, newLinkVk, updateInfo } = req.body
+    // let { newName, oldName, newDesc, newPrice, availabelProduct, newLinkVk, updateInfo } = req.body
+    let { newName, oldName, newDesc, newPrice, availabelProduct, newLinkVk} = req.body
 
     let device, location
 
