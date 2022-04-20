@@ -107,7 +107,7 @@ class DeviceController {
 
     let { newName, oldName, newDesc, newPrice, availabelProduct, newLinkVk, updateInfo } = req.body
 
-    let device, location, id
+    let device, location
 
     if (req.files) {
 
@@ -124,18 +124,19 @@ class DeviceController {
     }
 
     if (updateInfo) {
-      id = await db.query('select id from device where device_name = $1', [oldName])
       updateInfo = JSON.parse(updateInfo)
-      
-      // db.query('delete from device_character where device_id = $1', [id.rows[0].id])
-     
-      updateInfo.forEach(i => {
-        db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
-          [i.title, i.description, id.rows[0].id])
-      })
+      if (updateInfo.length > 0) {
 
+        let id = await db.query(`select id from device where device_name = '${oldName}'`)
+        
+        await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
+
+        updateInfo.forEach(i => {
+          db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
+            [i.title, i.description, id.rows[0].id])
+        })
+      }
     }
-
     if (location && !newName && !newPrice && !newDesc) {
 
       device = await db.query(`update device set img = $1 where device_name = $2`, [location, oldName])
