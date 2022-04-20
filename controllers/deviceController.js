@@ -123,20 +123,20 @@ class DeviceController {
 
     }
 
-    if (updateInfo) {
-      updateInfo = JSON.parse(updateInfo)
-      if (updateInfo.length > 0) {
+    // if (updateInfo) {
+    //   updateInfo = JSON.parse(updateInfo)
+    //   if (updateInfo.length > 0) {
 
-        let id = await db.query(`select id from device where device_name = '${oldName}'`)
+    //     let id = await db.query(`select id from device where device_name = '${oldName}'`)
         
-        await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
+    //     await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
 
-        updateInfo.forEach(i => {
-          db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
-            [i.title, i.description, id.rows[0].id])
-        })
-      }
-    }
+    //     updateInfo.forEach(i => {
+    //       db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
+    //         [i.title, i.description, id.rows[0].id])
+    //     })
+    //   }
+    // }
     if (location && !newName && !newPrice && !newDesc) {
 
       device = await db.query(`update device set img = $1 where device_name = $2`, [location, oldName])
