@@ -36,10 +36,12 @@ class DeviceController {
 
     if (info_device) {
       info_device = JSON.parse(info_device)
-      info_device.forEach(i => {
-        db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
-          [i.title, i.description, device.rows[0].id])
-      })
+      if (info_device.length > 0) {
+        info_device.forEach(i => {
+          db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
+            [i.title, i.description, device.rows[0].id])
+        })
+      }
     }
 
     res.json(device.rows[0])
@@ -106,7 +108,6 @@ class DeviceController {
     const { eyeId, linkId, rating, click_to_link } = req.query
 
     let { newName, oldName, newDesc, newPrice, availabelProduct, newLinkVk, updateInfo } = req.body
-    // let { newName, oldName, newDesc, newPrice, availabelProduct, newLinkVk} = req.body
 
     let device, location
 
@@ -129,8 +130,8 @@ class DeviceController {
       if (updateInfo.length > 0) {
 
         let id = await db.query(`select id from device where device_name = '${oldName}'`)
-        
-        // await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
+
+        await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
 
         updateInfo.forEach(i => {
           db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
