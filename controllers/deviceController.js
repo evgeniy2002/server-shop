@@ -132,11 +132,15 @@ class DeviceController {
         let id = await db.query(`select id from device where device_name = '${oldName}'`)
 
         await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
-
+        
         updateInfo.forEach(i => {
           db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
-            [i.title, i.description, id.rows[0].id])
+          [i.title, i.description, id.rows[0].id])
         })
+      }
+      if(updateInfo.length === 0){
+        await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
+        
       }
     }
     if (location && !newName && !newPrice && !newDesc) {
