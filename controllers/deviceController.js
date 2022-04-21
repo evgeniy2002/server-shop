@@ -128,7 +128,7 @@ class DeviceController {
     if (updateInfo) {
       updateInfo = JSON.parse(updateInfo)
       if (updateInfo.length > 0) {
-
+        console.log(updateInfo)
         let id = await db.query(`select id from device where device_name = '${oldName}'`)
 
         // await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
