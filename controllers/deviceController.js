@@ -138,10 +138,6 @@ class DeviceController {
           [i.title, i.description, id.rows[0].id])
         })
       }
-      if(updateInfo.length === 0){
-        await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
-        
-      }
     }
     if (location && !newName && !newPrice && !newDesc) {
 
