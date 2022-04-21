@@ -34,15 +34,15 @@ class DeviceController {
       [name, price, location, brandId, desc, link_to_vk])
 
 
-    // if (info_device) {
-    //   info_device = JSON.parse(info_device)
-    //   if (info_device.length > 0) {
-    //     info_device.forEach(i => {
-    //       db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
-    //         [i.title, i.description, device.rows[0].id])
-    //     })
-    //   }
-    // }
+    if (info_device) {
+      info_device = JSON.parse(info_device)
+      if (info_device.length > 0) {
+        // info_device.forEach(i => {
+        //   db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
+        //     [i.title, i.description, device.rows[0].id])
+        // })
+      }
+    }
 
     res.json(device.rows[0])
 
