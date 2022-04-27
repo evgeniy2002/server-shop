@@ -170,10 +170,10 @@ class DeviceController {
     if (availabelProduct) {
       await db.query(`update device set product_availability = '${availabelProduct === 'есть' ? true : false}' where device_name = $1`, [oldName])
     }
-    if (newLinkVk) {
+    if (newLinkVk && !newLinkVkOther) {
       await db.query(`update device set link_to_vk = $1 where device_name = $2`, [newLinkVk, oldName])
     }
-    if(newLinkVkOther){
+    if(newLinkVkOther && !newLinkVk){
       await db.query(`update device set link_to_vk_other = $1 where device_name = $2`, [newLinkVkOther, oldName])
     }
     if (eyeId) {
