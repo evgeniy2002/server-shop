@@ -132,10 +132,10 @@ class DeviceController {
         let id = await db.query(`select id from device where device_name = '${oldName}'`)
 
         await db.query(`delete from device_character where device_id = '${id.rows[0].id}'`)
-        
+
         updateInfo.forEach(i => {
           db.query('insert into device_character(title, description, device_id) values ($1, $2, $3) returning *',
-          [i.title, i.description, id.rows[0].id])
+            [i.title, i.description, id.rows[0].id])
         })
       }
     }
@@ -173,8 +173,10 @@ class DeviceController {
     if (newLinkVk && !newLinkVkOther) {
       await db.query(`update device set link_to_vk = $1 where device_name = $2`, [newLinkVk, oldName])
     }
-    if(newLinkVkOther && !newLinkVk){
-      await db.query(`update device set link_to_vk_other = $1 where device_name = $2`, [newLinkVkOther, oldName])
+    if (newLinkVkOther && !newLinkVk) {
+
+      await db.query(`update device set link_to_vk_other = $1 where device_name = $2 returning *`, [newLinkVkOther, oldName])
+
     }
     if (eyeId) {
       await db.query(`update device set rating = ${rating} where id = ${eyeId}`)
