@@ -12,7 +12,7 @@ let s3 = new EasyYandexS3({
 
 class DeviceController {
   async create(req, res) {
-    let { name, price, brandId, desc, link_to_vk, info_device } = req.body
+    let { name, price, brandId, desc, link_to_vk, link_to_vk_other, info_device } = req.body
     let device, location
 
     if (req.files) {
@@ -30,8 +30,8 @@ class DeviceController {
         [name, price, brandId, desc, link_to_vk])
     }
 
-    device = await db.query('insert into device(device_name, price, img, brand_id, description, link_to_vk) values($1,$2,$3,$4,$5,$6) returning *',
-      [name, price, location, brandId, desc, link_to_vk])
+    device = await db.query('insert into device(device_name, price, img, brand_id, description, link_to_vk, link_to_vk_other) values($1,$2,$3,$4,$5,$6,$7) returning *',
+      [name, price, location, brandId, desc, link_to_vk, link_to_vk_other])
 
 
     if (info_device) {
@@ -107,7 +107,7 @@ class DeviceController {
 
     const { eyeId, linkId, rating, click_to_link } = req.query
 
-    let { newName, oldName, newDesc, newPrice, availabelProduct, newLinkVk, updateInfo } = req.body
+    let { newName, oldName, newDesc, newPrice, availabelProduct, newLinkVk, newLinkVkOther, updateInfo } = req.body
 
     let device, location
 
@@ -173,7 +173,9 @@ class DeviceController {
     if (newLinkVk) {
       await db.query(`update device set link_to_vk = $1 where device_name = $2`, [newLinkVk, oldName])
     }
-
+    if(newLinkVkOther){
+      await db.query(`update device set link_to_vk_other = $1 where device_name = $2`, [newLinkVkOther, oldName])
+    }
     if (eyeId) {
       await db.query(`update device set rating = ${rating} where id = ${eyeId}`)
 
